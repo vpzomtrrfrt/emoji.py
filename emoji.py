@@ -1,12 +1,20 @@
 #!/bin/env python3
 import sys
 def parseChar(data, char):
-	if data["string"] != None:
+	blockStarts = (
+		"\U0001f51a" # end with arrow (if)
+	)
+	if data["string"] != None: # parsing a string
 		if char == "\U0001f4ac": # speech balloon (end string)
 			data["stack"].append(data["string"])
 			data["string"] = None
 		else:
 			data["string"] += char
+	elif data["skip"] > 0:
+		if char == "\U0001f427": # penguin (end block)
+			data["skip"] -= 1
+		elif char in blockStarts:
+			data["skip"] += 1
 	elif char == "\U0001f4ac": # speech balloon (begin string)
 		data["string"] = ""
 	elif char == "\u27a1": # black rightwards arrow (print)
@@ -15,6 +23,8 @@ def parseChar(data, char):
 		data["stack"].append(True)
 	elif char == "\U0001f6b3": # no bicycles (false)
 		data["stack"].append(False)
+	elif char == "\U0001f6b4": # bicyclist (not)
+		data["stack"].append(not data["stack"].pop())
 	elif char == "\U0001f46b": # man and woman holding hands (add)
 		data["stack"].append(data["stack"].pop()+data["stack"].pop())
 	elif char == "\U0001f46a": # family (multiply)
@@ -28,17 +38,30 @@ def parseChar(data, char):
 		data["stack"].append(data["stack"].pop()%a)
 	elif char == "\U0001f522": # input symbol for numbers (parse float)
 		data["stack"].append(float(data["stack"].pop()))
+	elif char == "\U0001f46c": # two men holding hands (equal)
+		data["stack"].append(data["stack"].pop()==data["stack"].pop())
+	elif char == "\U0001f51a": # end with arrow (if)
+		if not data["stack"].pop():
+			data["skip"] += 1
+	elif char == "\U0001f465": # busts in silhouette (duplicate)
+		a = data["stack"].pop()
+		data["stack"].append(a)
+		data["stack"].append(a)
 def emojiEval(s, stack=[]):
 	data = {
 		"string": None,
-		"stack": stack
+		"stack": stack,
+		"skip": 0
 	}
+	c = ""
 	try:
-		for c in s:
+		for i in range(0,len(s)):
+			c = s[i]
 			parseChar(data, c)
 	except Exception as e:
 		print(e)
 		print(data)
+		print(c)
 if __name__ == "__main__":
 	if len(sys.argv) == 1:
 		emojiEval(sys.stdin.read())
