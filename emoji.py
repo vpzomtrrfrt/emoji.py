@@ -56,7 +56,7 @@ def parseChar(data, char):
 	elif char == "\U0001f4e4": # outbox (round up)
 		data["stack"].append(int(data["stack"].pop()+1))
 	elif char == "\U0001f402": # ox (convert to hex string)
-		data["stack"].append(hex(data["stack"].pop()))
+		data["stack"].append(hex(int(data["stack"].pop())))
 	elif char == "\U0001f522": # input symbol for numbers (parse float)
 		data["stack"].append(float(data["stack"].pop()))
 	elif char == "\U0001f46c": # two men holding hands (equal)
