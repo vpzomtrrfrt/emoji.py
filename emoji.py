@@ -1,5 +1,6 @@
 #!/bin/env python3
 import sys
+import traceback
 def parseChar(data, char):
 	blockStarts = (
 		"\U0001f51a" # end with arrow (if)
@@ -69,6 +70,14 @@ def parseChar(data, char):
 	elif char == "\U0001f51a": # end with arrow (if)
 		if not data["stack"].pop():
 			data["skip"] += 1
+	elif char == "\U0001f503": # clockwise circle arrows (while)
+		b = data["stack"].pop()
+		c = data["stack"].pop()
+		while True:
+			emojiEvalSub(c, data)
+			if not data["stack"].pop():
+				break
+			emojiEvalSub(b, data)
 	elif char == "\U0001f465": # busts in silhouette (duplicate)
 		a = data["stack"].pop()
 		data["stack"].append(a)
@@ -87,21 +96,23 @@ def parseChar(data, char):
 	elif char == "\u2702": # scissors (substring)
 		b = data["stack"].pop()
 		a = data["stack"].pop()
-		data["stack"].append(data["stack"].pop()[a:b])
+		data["stack"].append(data["stack"].pop()[int(a):int(b)])
 	elif char == "\u26fd": # fuel pump (begin function)
 		data["func"] = ""
 	elif char == "\U0001f3c3": # runner (run function)
 		emojiEvalSub(data["stack"].pop(), data)
 def emojiEvalSub(s, data):
 	c = ""
+	stackThen = []
 	try:
 		for i in range(0,len(s)):
 			c = s[i]
+			stackThen = data["stack"][:]
 			parseChar(data, c)
-	except Exception as err:
-		print("Error!")
-		print("{1}: {0}".format(err, type(err)))
+	except:
+		traceback.print_exc()
 		print(data)
+		print(stackThen)
 		print(c)
 def emojiEval(s, stack=[]):
 	data = {
