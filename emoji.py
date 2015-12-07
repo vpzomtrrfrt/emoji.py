@@ -36,6 +36,8 @@ def parseChar(data, char):
 	elif char == "\U0001f4b8": # money with wings (modulo)
 		a = data["stack"].pop()
 		data["stack"].append(data["stack"].pop()%a)
+	elif char == "\U0001f402": # ox (convert to hex string)
+		data["stack"].append(hex(data["stack"].pop()))
 	elif char == "\U0001f522": # input symbol for numbers (parse float)
 		data["stack"].append(float(data["stack"].pop()))
 	elif char == "\U0001f46c": # two men holding hands (equal)
@@ -47,6 +49,10 @@ def parseChar(data, char):
 		a = data["stack"].pop()
 		data["stack"].append(a)
 		data["stack"].append(a)
+	elif char == "\U0001f523": # input symbol for symbols (char code)
+		data["stack"].append(ord(data["stack"].pop()))
+	elif char == "\U0001f50d": # left-pointing magnifying glass (from char code)
+		data["stack"].append(chr(int(data["stack"].pop())))
 def emojiEval(s, stack=[]):
 	data = {
 		"string": None,
