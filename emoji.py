@@ -101,6 +101,18 @@ def parseChar(data, char):
 		data["func"] = ""
 	elif char == "\U0001f3c3": # runner (run function)
 		emojiEvalSub(data["stack"].pop(), data)
+	elif char == "\U0001f50a": # speaker with three waves (capitalize)
+		data["stack"].append(data["stack"].pop().upper())
+	elif char == "\U0001f509": # speaker with one wave (lowercase)
+		data["stack"].append(data["stack"].pop().lower())
+	elif char == "\U0001f4da": # books (create array)
+		data["stack"].append([])
+	elif char == "\U0001f4cc": # pushpin (push element to array)
+		e = data["stack"].pop()
+		data["stack"].pop().append(e)
+	elif char == "\U0001f511": # key (get array element / string character)
+		i = data["stack"].pop()
+		data["stack"].append(data["stack"].pop()[i])
 def emojiEvalSub(s, data):
 	c = ""
 	stackThen = []
