@@ -39,7 +39,8 @@ def parseChar(data, char):
 	elif char == "\U0001f6b4": # bicyclist (not)
 		data["stack"].append(not data["stack"].pop())
 	elif char == "\U0001f46b": # man and woman holding hands (add)
-		data["stack"].append(data["stack"].pop()+data["stack"].pop())
+		a = data["stack"].pop()
+		data["stack"].append(data["stack"].pop()+a)
 	elif char == "\U0001f46a": # family (multiply)
 		data["stack"].append(data["stack"].pop()*data["stack"].pop())
 	elif char == "\U0001f30a": # water wave (subtract)
@@ -113,6 +114,11 @@ def parseChar(data, char):
 	elif char == "\U0001f511": # key (get array element / string character)
 		i = data["stack"].pop()
 		data["stack"].append(data["stack"].pop()[i])
+	elif char == "\U0001f500": # twisted rightwards arrows (swap)
+		b = data["stack"].pop()
+		a = data["stack"].pop()
+		data["stack"].append(b)
+		data["stack"].append(a)
 def emojiEvalSub(s, data):
 	c = ""
 	stackThen = []
