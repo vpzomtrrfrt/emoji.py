@@ -39,8 +39,12 @@ def parseChar(data, char):
 	elif char == "\U0001f6b4": # bicyclist (not)
 		data["stack"].append(not data["stack"].pop())
 	elif char == "\U0001f46b": # man and woman holding hands (add)
+		b = data["stack"].pop()
 		a = data["stack"].pop()
-		data["stack"].append(data["stack"].pop()+a)
+		if type(a) == str or type(b) == str:
+			a = str(a)
+			b = str(b)
+		data["stack"].append(a+b)
 	elif char == "\U0001f46a": # family (multiply)
 		data["stack"].append(data["stack"].pop()*data["stack"].pop())
 	elif char == "\U0001f30a": # water wave (subtract)
@@ -122,16 +126,10 @@ def parseChar(data, char):
 def emojiEvalSub(s, data):
 	c = ""
 	stackThen = []
-	try:
-		for i in range(0,len(s)):
-			c = s[i]
-			stackThen = data["stack"][:]
-			parseChar(data, c)
-	except:
-		traceback.print_exc()
-		print(data)
-		print(stackThen)
-		print(c)
+	for i in range(0,len(s)):
+		c = s[i]
+		stackThen = data["stack"][:]
+		parseChar(data, c)
 def emojiEval(s, stack=[]):
 	data = {
 		"string": None,
@@ -140,7 +138,13 @@ def emojiEval(s, stack=[]):
 		"vars": {},
 		"func": None
 	}
-	emojiEvalSub(s, data)
+	try:
+		emojiEvalSub(s, data)
+	except:
+		traceback.print_exc()
+		print(data)
+		print(stackThen)
+		print(c)
 if __name__ == "__main__":
 	if len(sys.argv) == 1:
 		emojiEval(sys.stdin.read())
