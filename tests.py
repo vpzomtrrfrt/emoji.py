@@ -1,8 +1,9 @@
 # Unit Tests for Emoji interpreter
 import emoji
 import unittest
-def getResults(s):
-	stack = []
+def getResults(s, stack=None):
+	if stack == None:
+		stack = []
 	emoji.emojiEval(s, stack)
 	if len(stack) == 1:
 		return stack[0]
@@ -33,6 +34,7 @@ DISC = "\U0001f4bf"
 INBOX = "\U0001f4e5"
 OUTBOX = "\U0001f4e4"
 END = "\U0001f51a"
+BACK = "\U0001f519"
 PENGUIN = "\U0001f427"
 CHICK = "\U0001f423"
 CHICKEN = "\U0001f414"
@@ -81,6 +83,10 @@ class EmojiTests(unittest.TestCase):
 	def testIf(self):
 		self.assertEqual(getResults(BICYCLE+END+SPEECH+"test"+SPEECH+PENGUIN), "test")
 		self.assertEqual(getResults(NO_BICYCLES+END+SPEECH+"test"+SPEECH+PENGUIN), "")
+	def testElse(self):
+		func = END+SPEECH+"test"+SPEECH+PENGUIN+BACK+SPEECH+"hi"+SPEECH+PENGUIN
+		self.assertEqual(getResults(func, [False]), "hi")
+		self.assertEqual(getResults(func, [True]), "test")
 	def testLessThan(self):
 		self.assertTrue(getResults(SPEECH+"5"+SPEECH+NUMBERS+SPEECH+"6"+SPEECH+NUMBERS+CHICK))
 		self.assertFalse(getResults(SPEECH+"5"+SPEECH+NUMBERS+SPEECH+"4"+SPEECH+NUMBERS+CHICK))

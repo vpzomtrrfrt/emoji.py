@@ -3,7 +3,8 @@ import sys
 import traceback
 def parseChar(data, char):
 	blockStarts = (
-		"\U0001f51a" # end with arrow (if)
+		"\U0001f51a", # end with arrow (if)
+		"\U0001f519" # back with arrow (else)
 	)
 	if data["string"] != None: # parsing a string
 		if char == "\U0001f4ac": # speech balloon (end string)
@@ -75,6 +76,12 @@ def parseChar(data, char):
 	elif char == "\U0001f51a": # end with arrow (if)
 		if not data["stack"].pop():
 			data["skip"] += 1
+			data["else"] = True
+		else:
+			data["else"] = False
+	elif char == "\U0001f519": # back with arrow (else)
+		if not data["else"]:
+			data["skip"] += 1
 	elif char == "\U0001f503": # clockwise circle arrows (while)
 		b = data["stack"].pop()
 		c = data["stack"].pop()
@@ -136,15 +143,14 @@ def emojiEval(s, stack=[]):
 		"stack": stack,
 		"skip": 0,
 		"vars": {},
-		"func": None
+		"func": None,
+		"else": False
 	}
 	try:
 		emojiEvalSub(s, data)
 	except:
 		traceback.print_exc()
 		print(data)
-		print(stackThen)
-		print(c)
 if __name__ == "__main__":
 	if len(sys.argv) == 1:
 		emojiEval(sys.stdin.read())
