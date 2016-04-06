@@ -67,7 +67,7 @@ class EmojiTests(unittest.TestCase):
 		self.assertEqual(getResults(SPEECH+"42"+SPEECH+NUMBERS), 42)
 	def testAdd(self):
 		self.assertEqual(getResults(SPEECH+"9"+SPEECH+NUMBERS+SPEECH+"10"+SPEECH+NUMBERS+HOLD_HANDS), 19)
-	def testAdd(self):
+	def testSubtract(self):
 		self.assertEqual(getResults(SPEECH+"9"+SPEECH+NUMBERS+SPEECH+"10"+SPEECH+NUMBERS+WAVE), -1)
 	def testMultiply(self):
 		self.assertEqual(getResults(SPEECH+"9"+SPEECH+NUMBERS+SPEECH+"10"+SPEECH+NUMBERS+FAMILY), 90)
@@ -135,5 +135,13 @@ class EmojiTests(unittest.TestCase):
 		self.assertEqual(getResults(SPEECH+"test"+SPEECH+SPEECH+"2"+SPEECH+KEY), "s")
 	def testSwap(self):
 		self.assertEqual(getResults(SPEECH+"1"+SPEECH+SPEECH+"2"+SPEECH+TWISTED_ARROWS), "2, 1")
+	def testNesting(self):
+		func = END+END+SPEECH+"hello"+SPEECH+PENGUIN+SPEECH+"world"+SPEECH+PENGUIN
+		self.assertEqual(getResults(func, [True, True]), "hello, world")
+		self.assertEqual(getResults(func, [True, False]), True)
+		self.assertEqual(getResults(func, [False, True]), "world")
+		self.assertEqual(getResults(func, [False, False]), False)
+	def testConcat(self):
+		self.assertEqual(getResults(SPEECH+"test "+SPEECH+SPEECH+"message"+SPEECH+HOLD_HANDS), "test message")
 if __name__ == "__main__":
 	unittest.main()
