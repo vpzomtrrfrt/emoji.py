@@ -41,6 +41,17 @@ CHICKEN = "\U0001f414"
 OX = "\U0001f402"
 LOOP = "\U0001f503"
 BUSTS = "\U0001f465"
+TWO_MEN = "\U0001f46c"
+SYMBOLS = "\U0001f523"
+MAGNIFIER = "\U0001f50d"
+CURL_PAGE = "\U0001f4c3"
+SCISSORS = "\u2702"
+LOUD_SPEAKER = "\U0001f50a"
+QUIET_SPEAKER = "\U0001f509"
+BOOKS = "\U0001f4da"
+PUSHPIN = "\U0001f4cc"
+KEY = "\U0001f511"
+TWISTED_ARROWS = "\U0001f500"
 class EmojiTests(unittest.TestCase):
 	def testStrings(self):
 		self.assertEqual(getResults(SPEECH+"test"+SPEECH), "test")
@@ -99,5 +110,30 @@ class EmojiTests(unittest.TestCase):
 		self.assertEqual(getResults(SPEECH+"16"+SPEECH+NUMBERS+OX), "0x10")
 	def testWhile(self):
 		self.assertEqual(getResults(SPEECH+"0"+SPEECH+NUMBERS+SPEECH+"i"+SPEECH+TO_PHONE+PUMP+SPEECH+"i"+SPEECH+PHONE+BUSTS+SPEECH+"5"+SPEECH+NUMBERS+CHICK+CAR+PUMP+SPEECH+"i"+SPEECH+PHONE+SPEECH+"1"+SPEECH+NUMBERS+HOLD_HANDS+SPEECH+"i"+SPEECH+TO_PHONE+CAR+LOOP), "0.0, 1.0, 2.0, 3.0, 4.0, 5.0")
+	def testEquals(self):
+		self.assertTrue(getResults(TWO_MEN, [4, 4]))
+		self.assertFalse(getResults(TWO_MEN, [19, 21]))
+	def testToCharCode(self):
+		self.assertEqual(getResults(PUMP+SPEECH+CAR+SYMBOLS), 0x1f4ac)
+		self.assertEqual(getResults(SPEECH+" "+SPEECH+SYMBOLS), 32)
+	def testFromCharCode(self):
+		self.assertEqual(getResults(SPEECH+"0x1f4ac"+SPEECH+NUMBERS+MAGNIFIER), SPEECH)
+		self.assertEqual(getResults(SPEECH+"32"+SPEECH+NUMBERS+MAGNIFIER), " ")
+	def testLength(self):
+		self.assertEqual(getResults(SPEECH+"test message!"+SPEECH+CURL_PAGE), 13)
+		self.assertEqual(getResults(SPEECH+SPEECH+CURL_PAGE), 0)
+	def testSubstring(self):
+		self.assertEqual(getResults(SPEECH+"hello"+SPEECH+SPEECH+"2"+SPEECH+SPEECH+"4"+SPEECH+SCISSORS), "ll")
+	def testCapitalize(self):
+		self.assertEqual(getResults(SPEECH+"It's over 9000"+SPEECH+LOUD_SPEAKER), "IT'S OVER 9000")
+	def testLowercase(self):
+		self.assertEqual(getResults(SPEECH+"Hi"+SPEECH+QUIET_SPEAKER), "hi")
+	def testArray(self):
+		var = SPEECH+"v"+SPEECH
+		self.assertEqual(getResults(BOOKS+var+TO_PHONE+var+PHONE+BICYCLE+PUSHPIN+var+PHONE+SPEECH+"hi"+SPEECH+PUSHPIN+var+PHONE+SPEECH+"0"+SPEECH+KEY), True)
+	def testStringChar(self):
+		self.assertEqual(getResults(SPEECH+"test"+SPEECH+SPEECH+"2"+SPEECH+KEY), "s")
+	def testSwap(self):
+		self.assertEqual(getResults(SPEECH+"1"+SPEECH+SPEECH+"2"+SPEECH+TWISTED_ARROWS), "2, 1")
 if __name__ == "__main__":
 	unittest.main()
