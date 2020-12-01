@@ -158,7 +158,7 @@ if __name__ == "__main__":
 	if len(sys.argv) == 1:
 		emojiEval(sys.stdin.read())
 	else:
-		h = open(sys.argv[1])
+		h = open(sys.argv[1], encoding="utf-8")
 		s = h.read()
 		h.close()
 		emojiEval(s, sys.argv[2:])
