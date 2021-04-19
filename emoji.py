@@ -122,9 +122,14 @@ def parseChar(data, char):
 		data["stack"].append(data["stack"].pop().lower())
 	elif char == "\U0001f4da": # books (create array)
 		data["stack"].append([])
-	elif char == "\U0001f4cc": # pushpin (push element to array)
+	elif char == "\U0001f4cc": # pushpin (push element to array / string)
 		e = data["stack"].pop()
-		data["stack"].pop().append(e)
+		f = data["stack"].pop()
+		if type(f) != str:
+			f.append(e)
+		else:
+			f += e
+		data["stack"].append(f)
 	elif char == "\U0001f511": # key (get array element / string character)
 		i = data["stack"].pop()
 		data["stack"].append(data["stack"].pop()[int(i)])
